@@ -8,6 +8,7 @@ import { fileURLToPath } from "url";
 import { dirname } from "path";
 import path from "path";
 import initialRoutes from "./routes/index.js";
+
 dotenv.config();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -26,8 +27,8 @@ app.use("/images", express.static(path.join(__basedir, "images")));
 
 // cookie;
 app.use(cookiesParser());
-app.get("/test", (req, res) => {
-  res.status(200).send("fdafads");
+app.get("/test", async (req, res) => {
+  res.status(200).send("test");
 });
 
 initialRoutes(app);

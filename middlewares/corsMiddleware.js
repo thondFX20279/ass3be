@@ -1,4 +1,6 @@
 import cors from "cors";
+import dotenv from "dotenv";
+dotenv.config();
 
 const corsOption = {
   origin: [process.env.FONTEND_URL, process.env.ADMIN_URL, "*"],
