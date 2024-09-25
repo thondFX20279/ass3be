@@ -4,6 +4,22 @@ import User from "../models/User.js";
 import sendOrderConfirmation from "../services/sendMail.js";
 export const getOrders = async (req, res, next) => {
   try {
+    const { isAdmin, limit = 10 } = req.query;
+
+    if (isAdmin) {
+      const totalUser = await User.countDocuments({ role: "R1" });
+      const orders = await Order.find()
+        .limit(limit)
+        .populate("items.productId")
+        .populate("userId")
+        .lean()
+        .sort({ createdAt: -1 });
+
+      const totalRevenue = orders.reduce((sum, order) => sum + order.totalPrice, 0);
+
+      const data = { totalUser, orders, totalRevenue };
+      return res.status(200).send(data);
+    }
     const orders = await Order.find().populate("items.productId").populate("userId");
 
     const formattedOrders = orders.map((order) => ({
