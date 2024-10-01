@@ -32,18 +32,15 @@ export const register = async (req, res, next) => {
 export const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
-    console.log("email: ", email);
 
     // Find user by username
     const user = await User.findOne({ email });
-    console.log("email");
 
     if (!user) return next(createError(422, "Invalid username or password"));
 
     // Check if password matches
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return next(createError(422, "Invalid username or password"));
-    console.log("ismath");
 
     // Generate token including the role
     const token = generateToken({ id: user._id, role: user.role });

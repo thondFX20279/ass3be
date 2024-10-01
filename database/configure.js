@@ -7,7 +7,7 @@ const connectDB = async (cb) => {
     cb();
   } catch (error) {
     console.error("MongoDB connection error:", error.message);
-    process.exit(1); // Thoát nếu kết nối thất bại
+    process.exit(1);
   }
 };
 export default connectDB;

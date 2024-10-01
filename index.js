@@ -8,12 +8,11 @@ import { fileURLToPath } from "url";
 import { dirname } from "path";
 import path from "path";
 import initialRoutes from "./routes/index.js";
-
+import Session from "./models/Session.js";
 dotenv.config();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 global.__basedir = __dirname;
-console.log("basedir: ", __basedir);
 
 const app = express();
 const PORT = process.env.PORT || 3002;
@@ -41,6 +40,25 @@ connectDB(() => {
     const io = socketServer.init(sever);
     io.on("connection", (socket) => {
       console.log(`connected: ${socket}`);
+      socket.on("sendMessage", async ({ userId, message, senderId }) => {
+        console.log("userId: ", userId);
+        console.log("userId: ", message);
+        console.log("userId: ", senderId);
+
+        try {
+          const room = await Session.findOneAndUpdate(
+            { userId },
+            { $push: { messages: { senderId, message } } },
+            { new: true }
+          );
+          socket.broadcast.emit("receiveMessage", { userId, message, senderId });
+        } catch (error) {
+          console.error(error);
+        }
+        socket.on("disconnect", () => {
+          console.log("User disconnected");
+        });
+      });
     });
   } catch (error) {
     console.log(`server Error: `, error.message);

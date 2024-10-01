@@ -56,7 +56,6 @@ routes.post(
   ],
   (req, res, next) => {
     const results = validationResult(req);
-    console.log("results: ", results);
     if (!results.isEmpty()) {
       return res
         .status(422)

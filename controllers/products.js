@@ -98,7 +98,6 @@ export const createProduct = async (req, res, next) => {
 };
 export const getProductById = async (req, res, next) => {
   const { productId } = req.params;
-  console.log(productId);
 
   const product = await Product.findById(productId);
 

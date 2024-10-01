@@ -32,7 +32,6 @@ export const getOrders = async (req, res, next) => {
       totalPrice: order.totalPrice,
     }));
 
-    console.log("Formatted Orders: ", formattedOrders);
     res.status(200).send({ success: true, orders: formattedOrders });
   } catch (error) {
     next(createError(500, "Failed to retrieve orders"));
