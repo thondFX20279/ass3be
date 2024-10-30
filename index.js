@@ -41,10 +41,6 @@ connectDB(() => {
     io.on("connection", (socket) => {
       console.log(`connected: ${socket}`);
       socket.on("sendMessage", async ({ userId, message, senderId }) => {
-        console.log("userId: ", userId);
-        console.log("userId: ", message);
-        console.log("userId: ", senderId);
-
         try {
           const room = await Session.findOneAndUpdate(
             { userId },

@@ -39,8 +39,6 @@ export const getCart = async (req, res, next) => {
 
 export const addProductToCart = async (req, res, next) => {
   const { productId, quantity = 1 } = req.body;
-  console.log("add product");
-
   const userId = req.user.id;
 
   try {

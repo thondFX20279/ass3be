@@ -4,7 +4,6 @@ const transporter = createTransport({
   service: "gmail",
   auth: { user: "thondfx20279@funix.edu.vn", pass: "vsxt xjvs metf thaj" },
 });
-
 const sendOrderConfirmation = async (user, items, order) => {
   const mailOptions = {
     from: "your-email@gmail.com",

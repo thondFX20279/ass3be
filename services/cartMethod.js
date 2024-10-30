@@ -1,6 +1,4 @@
 export const addToCart = function (productId, quantity) {
-  console.log(this);
-
   const productIndex = this.cart.items.findIndex((item) => item.productId.toString() === productId);
   if (productIndex === -1) {
     this.cart.items.push({ productId, quantity: quantity });
