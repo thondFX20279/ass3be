@@ -24,5 +24,5 @@ routes.post(
   ctrls.createOrders
 );
 routes.get("/:orderId", verifyToken, ctrls.getOrder);
-
+routes.get("/user/:userId", verifyToken, ctrls.getOrdersByUser);
 export default routes;

@@ -23,13 +23,13 @@ export const getOrders = async (req, res, next) => {
     const orders = await Order.find().populate("items.productId").populate("userId");
 
     const formattedOrders = orders.map((order) => ({
-      orderId: order._id,
-      userId: order.userId._id,
-      fullName: order.userId.fullName,
-      phone: order.phone,
-      status: order.status,
-      address: order.address,
-      totalPrice: order.totalPrice,
+      orderId: order?._id,
+      userId: order?.userId?._id,
+      fullName: order?.userId?.fullName,
+      phone: order?.phone,
+      status: order?.status,
+      address: order?.address,
+      totalPrice: order?.totalPrice,
     }));
 
     res.status(200).send({ success: true, orders: formattedOrders });
@@ -53,8 +53,8 @@ export const createOrders = async (req, res, next) => {
     // Create the new order
     const newOrder = new Order({
       items: user.cart.items.map((item) => ({
-        productId: item.productId._id,
-        quantity: item.quantity,
+        productId: item?.productId._id,
+        quantity: item?.quantity,
       })),
       userId: user._id,
       phone,
@@ -82,6 +82,29 @@ export const getOrder = async (req, res, next) => {
       items: order.items.map((item) => ({ ...item.productId, quantity: item.quantity })),
     };
     res.status(200).send({ success: true, order: formatedOrder });
+  } catch (error) {
+    next(error);
+  }
+};
+export const getOrdersByUser = async (req, res, next) => {
+  try {
+    const { userId } = req.params;
+
+    if (!userId) {
+      return next(createError(400, "Orders not found"));
+    }
+    const orders = await Order.find({ userId }).populate("items.productId").populate("userId");
+    const formattedOrders = orders.map((order) => ({
+      orderId: order?._id,
+      userId: order?.userId?._id,
+      fullName: order?.userId?.fullName,
+      phone: order?.phone,
+      status: order?.status,
+      address: order?.address,
+      totalPrice: order?.totalPrice,
+    }));
+
+    res.status(200).send({ success: true, orders: formattedOrders });
   } catch (error) {
     next(error);
   }
