@@ -130,3 +130,42 @@ export const deleteProduct = async (req, res, next) => {
     next(error);
   }
 };
+export const editProduct = async (req, res, next) => {
+  try {
+    const { productId } = req.params;
+    const { name, category, price, short_desc, long_desc } = req.body;
+    const product = await Product.findById(productId);
+    if (name) product.name = name;
+    if (category) product.category = category;
+    if (price) product.price = price;
+    if (short_desc) product.short_desc = short_desc;
+    if (long_desc) product.long_desc = long_desc;
+    if (req.files && req.files.length > 0) {
+      const newImages = req.files.map((file) => `${process.env.BASE_URL}/images/${file.filename}`);
+
+      // Xóa ảnh cũ
+      const oldImages = [product.img1, product.img2, product.img3, product.img4];
+      oldImages.forEach((url) => {
+        if (url) {
+          const fileName = url.split("/").pop();
+          const imagePath = path.join(__basedir, "images", fileName);
+
+          fs.unlink(imagePath, (err) => {
+            if (err) console.error(`Failed to delete image: ${imagePath}`, err);
+          });
+        }
+      });
+
+      product.img1 = newImages[0];
+      product.img2 = newImages[1] || null;
+      product.img3 = newImages[2] || null;
+      product.img4 = newImages[3] || null;
+    }
+
+    // Lưu cập nhật vào database
+    const updatedProduct = await product.save();
+    res.status(200).send({ success: true, message: "Product updated successfully", product: updatedProduct });
+  } catch (error) {
+    next(error);
+  }
+};

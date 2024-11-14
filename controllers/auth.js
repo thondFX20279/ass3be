@@ -52,7 +52,7 @@ export const login = async (req, res, next) => {
     res.cookie("access_token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "none",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
       expires: new Date(Date.now() + 3600000 * 7), // 7-hour expiration
     });
 

@@ -6,6 +6,7 @@ const routes = express.Router();
 
 routes.get("/", ctrls.getProducts);
 routes.post("/", verifyAdmin, upload, ctrls.createProduct);
+routes.patch("/:productId", verifyAdmin, upload, ctrls.editProduct);
 routes.delete("/:productId", verifyAdmin, ctrls.deleteProduct);
 routes.get("/categories", ctrls.getCategories);
 routes.get("/topTrending", ctrls.getTopTrending);
